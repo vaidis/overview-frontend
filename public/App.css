@@ -1,0 +1,167 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  animation: App-logo-spin infinite 20s linear;
+  height: 40vmin;
+  pointer-events: none;
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+body {
+  background: #c9cbc7;
+}
+
+.container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+ /* BOX */
+.host{
+  display: flex;
+  /*height: 60px;*/
+  /*width: 240px;*/
+  background: #fff;
+  /*color: #000;*/
+  margin: 5px;
+  flex: 10px 10px;
+  border-radius: 4px;
+  box-shadow: 0px 0px 15px -5px #111;
+  /*overflow: hidden;*/
+  border-right: 10px solid;
+}
+.host.pingFalse {
+  border-color: #fff;
+  border-color: #c2efc2;
+  /*border-color: green;*/
+}
+.host.pingTrue {
+  border-color: red;
+}
+
+.hostIcon {
+  /*width: 50px;*/
+  /*float: left;*/
+}
+.hostBody {
+  width: 170px;
+  padding: 5px;
+  /*background: #456;*/
+  /*float: right;*/
+}
+
+.host .field {
+  font-size: 0.9em;
+}
+
+
+/* ICON */
+.host .field.os_name {
+  width: 60px;
+  height: 60px;
+}
+.host .field.os_name img {
+  float: left;
+  margin-top: 5px;
+  margin-left: 3px;
+  width: 50px;
+  opacity: 0.8;
+  -webkit-filter: grayscale(30%); 
+  filter: grayscale(30%);
+}
+
+
+
+.host .field.address {
+  font-family: monospace;
+  font-size: 1.2em;
+  text-align: right;
+}
+
+.host.pingTrue .field.type {
+  color: #888;
+  float: left;
+  font-size: 0.8em;
+}
+.host.pingFalse .field.type {
+  color: #888;
+  float: left;
+  font-size: 0.8em;
+}
+.host .field.os_ver {
+  text-align: right;
+}
+
+.host .field.hostname {
+  text-align: right;
+  font-size: 0.7em;
+  color: #888;
+  margin-bottom: 4px;
+}
+
+
+.host.pingFalse .field.type {
+  color: #999;
+  float: left;
+}
+
+.host .field.root_usage {
+  text-align: right;
+  float: right; padding: 0px 5px;
+  color: #000;
+}
+
+.host .field.checktemp {
+  text-align: right;
+  float: right; padding: 0px 5px;
+  /*font-weight: bold;*/
+  color: #000;
+}
+.host .field .label {
+  /*font-weight: bold;*/
+  color: #aaa;
+}
+/*
+.menu{
+  width: 240px;
+  height: 50px;
+  background: #999;
+  margin: 5px;
+  padding: 5px;
+  flex: 10px 10px;
+  border-radius: 4px;
+  box-shadow: 0px 0px 15px -5px #111;
+  overflow: hidden;
+}*/
+
+/*
+footer {
+height: 100px;
+background: 999;
+}
+*/
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
