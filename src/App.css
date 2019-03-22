@@ -54,18 +54,15 @@ body {
   background: #fff;
 }
 .host.warning {
-border-color: #fff000;
-background: #f7fae0;
-background: #f9ffcf;
+  border-color: #fff000;
+  background: #f9ffcf;
 }
 .host.danger {
-border-color: #fb0075;
-background: #f7fae0;
+  border-color: #fb0075;
+  background: #ffe8f9;
 }
 .host.pingFalse {
-  border-color: #fb0085;
   border-color: #384951;
-  background: #384951;
 }
 .hostIcon {
 }
@@ -73,6 +70,18 @@ background: #f7fae0;
   width: 210px;
   padding: 3px 5px 3px 0px;
 }
+.host.current_ping .address {
+  background: #ddd;
+  border-radius: 2px;
+}
+.host .current_check {
+  border-radius: 2px; 
+  background: #ddd;
+  color: #000;  
+  float: right;
+  padding: 1px;
+}
+
 
 /* --------------------- ICON ------------------- */
 .host .field.os_name {
@@ -141,11 +150,11 @@ background: #f7fae0;
   float: right;
   color: #999;
 }
-.host .checks{
+.host .bottom{
   width: 100%;
   float: left;
 }
-.host .checks .field{
+.host .bottom .field{
   padding-left: 6px;
 }
 
@@ -172,6 +181,9 @@ background: #f7fae0;
 .host .field .label {
   font-size: 9px;
   color: #999;
+}
+.host .current_check .label {
+  color: #666;
 }
 
 /* --------------------- MODAL -------------------*/
@@ -231,10 +243,10 @@ background: #f7fae0;
   text-align: right;
 }
 .modalHeader button.modalClose {
-background: none;
-border: none;
-color: #ff0099;
-font-size: 28px;
+  background: none;
+  border: none;
+  color: #ff0099;
+  font-size: 28px;
 }
 
 /* --------------------- MODAL BUTTONS -----------*/
@@ -246,13 +258,13 @@ font-size: 28px;
   padding: 10px;
 }
 .modalButtons button {
-border-radius: 5px;
-background: #111;
-border: 0px;
-color: #0f0;
-margin: 5px;
-padding: 10px 15px;
-box-shadow: 0px 5px 15px -5px #111;
+  border-radius: 5px;
+  background: #111;
+  border: 0px;
+  color: #0f0;
+  margin: 5px;
+  padding: 10px 15px;
+  box-shadow: 0px 5px 15px -5px #111;
 }
 /* --------------------- MODAL BODY --------------*/
 .modalBody {
@@ -306,9 +318,9 @@ box-shadow: 0px 5px 15px -5px #111;
   width: 190px;
 }
 .filter input::placeholder {
-color: #aaa;
-font-style: italic;
-font-size: 14px;
+  color: #aaa;
+  font-style: italic;
+  font-size: 14px;
 }
 
 /* --------------------- LOADER ------------------*/

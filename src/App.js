@@ -3,7 +3,6 @@ import './App.css';
 import 'abortcontroller-polyfill';
 import Modal from 'react-modal';
 
-
 Modal.setAppElement('body');
 
 const url = 'http://10.0.31.222:7777'
@@ -17,6 +16,7 @@ class App extends Component {
     super(props);
     this.state = {
       data: [],
+      current_ping: '',
       filteredData: [],
       hostResponse: '',
       modalIsOpen: false,
@@ -31,7 +31,7 @@ class App extends Component {
 
   componentDidMount() {
     this.fetchUrl(url);
-    this.timer = setInterval(() => this.fetchUrl(url), 3000);
+    this.timer = setInterval(() => this.fetchUrl(url), 2000);
   }
   componentWillUnmount() {
     controller.abort();
@@ -50,7 +50,10 @@ class App extends Component {
       return response.json()
     })
     .then(responseJson => {
-      this.setState({ data: responseJson[0] });
+      this.setState({ data: responseJson[0]['hosts'] });
+      this.setState({ current_ping: responseJson[0]['current_ping'] });
+      this.setState({ current_check: responseJson[0]['current_check'] });
+      console.log("PING: ", this.state.current_ping)
     })
     .catch((error) => {
       console.log(" fetchUrl() error ", error)
@@ -107,13 +110,14 @@ class App extends Component {
     .map((item, key) => {
       return (
         <div className={"host ping" 
-          + item.ping 
-          + (item.root_usage > 80 ? ' warning ' : '') 
-          + (item.checktemp >  75 ? ' warning ' : '') 
-          + (item.latency >   750 ? ' warning ' : '') 
-          + (item.root_usage > 90 ? ' danger ' : '') 
+          + item.ping
+          + (item.address === this.state.current_ping ? ' current_ping ' : '')
+          + (item.root_usage > 80 ? ' warning ' : '')
+          + (item.checktemp >  75 ? ' warning ' : '')
+          + (item.latency >   750 ? ' warning ' : '')
+          + (item.root_usage > 90 ? ' danger ' : '')
           + (item.checktemp >  90 ? ' danger ' : '')
-          + (item.checkraid === "False" ? ' danger ' : '') 
+          + (item.checkraid === "False" ? ' danger ' : '')
           + (item.checkgeo === "False" ? ' danger ' : '')}
              key={key}
              onClick={() => {
@@ -132,49 +136,50 @@ class App extends Component {
 
                 <div className="hostBody">
 
-                    <div className="address">
-                      {item.address}
-                      <span className="type">{(item.type === "virtual") ? '[VM]' : ''}</span>
+                  <div className="address">
+                    {item.address}
+                    <span className="type">{(item.type === "virtual") ? '[VM]' : ''}</span>
+                  </div>
 
-                    </div>
                   <div className="hostname">{item.hostname}</div>
-
-                  <div className="checks">
+                  <div className="bottom ">
 
                     <div className={"field latency " + (item.latency > 9999 ? "hidden" : "")} >
                       <span className='label'>ping:</span>
-                        <span className={(item.latency > 750 ? 'warning' : '' )}>{item.latency < 9999 ? item.latency : "" }</span>
-                        <span className='label'>ms</span>
+                      <span className={(item.latency > 750 ? 'warning' : '' )}>{item.latency < 9999 ? item.latency : "" }</span>
+                      <span className='label'>ms</span>
                     </div>
 
-                    <div className={"field rootusage"}>
-                      <span className='label'>{item.root_usage ? "disk:" : ""}</span>
+                  <div className={(item.address === this.state.current_check ? ' current_check ' : '')} >
+                      <div className={"field rootusage"}>
+                        <span className='label'>{item.root_usage ? "disk:" : ""}</span>
                         <span className={(item.root_usage > 80 ? 'warning' : '' )+(item.root_usage > 90 ? ' danger' : '')}>{item.root_usage}</span>
                         <span className='label'>{item.root_usage ? "%" : ""}</span>
-                    </div>
+                      </div>
 
-                    {item.checkraid && (
-                    <div className={"field checkraid"}>
-                      <span className='label'>raid:</span>
+                      {item.checkraid && (
+                      <div className={"field checkraid"}>
+                        <span className='label'>raid:</span>
                         <span className={(item.checkraid === "False") ? 'danger' : '' }>{item.checkraid === "True" ? 'Ok' : 'Fail' }</span>
-                    </div>
-                    )}
+                      </div>
+                      )}
 
-                    {item.checkgeo && (
-                    <div className={"field checkgeo"} >
-                      <span className='label'>geo:</span>
+                      {item.checkgeo && (
+                      <div className={"field checkgeo"} >
+                        <span className='label'>geo:</span>
                         <span className={(item.checkgeo === "False") ? 'danger' : '' }>{item.checkgeo === "True" ? 'Ok' : 'Fail' }</span>
-                    </div>
-                    )}
+                      </div>
+                      )}
 
-                    <div className={"field checktemp"}>
-                      <span className='label'>{item.checktemp ? "temp:" : ""}</span>
-                        <span className={(item.checktemp > 75 ? 'warning' : '' ) + (item.checktemp > 90 ? ' danger' : '')}>{item.checktemp}</span>
-                        <span className='label'>{item.checktemp ? "'C" : ""}
-                      </span>
-                    </div>
-
+                      <div className={"field checktemp"}>
+                        <span className='label'>{item.checktemp ? "temp:" : ""}</span>
+                          <span className={(item.checktemp > 75 ? 'warning' : '' ) + (item.checktemp > 90 ? ' danger' : '')}>{item.checktemp}</span>
+                          <span className='label'>{item.checktemp ? "'C" : ""}
+                        </span>
+                      </div>
                   </div>
+
+                </div>
           </div>
         </div>
           )
@@ -311,7 +316,6 @@ class App extends Component {
                 </div>
 
             </Modal>
-
         </div>
     )
   }
