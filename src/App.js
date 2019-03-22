@@ -90,8 +90,7 @@ class App extends Component {
 
   setFilter(evt) {
     if(typeof evt.target.value !== "undefined"){
-      if(evt.target.value.match(/^[a-zA-Z0-9\.-]*$/)){
-        console.log("VAL OK");
+      if(evt.target.value.match(/^[a-zA-Z0-9.-]*$/)){
         this.setState({
           inputText  : evt.target.value
         });        
