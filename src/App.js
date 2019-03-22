@@ -90,7 +90,7 @@ class App extends Component {
 
   setFilter(evt) {
     if(typeof evt.target.value !== "undefined"){
-      if(evt.target.value.match(/^[a-zA-Z0-9-]*$/)){
+      if(evt.target.value.match(/^[a-zA-Z0-9\.-]*$/)){
         console.log("VAL OK");
         this.setState({
           inputText  : evt.target.value
@@ -103,7 +103,10 @@ class App extends Component {
 
     const filteredData = this.state.data.filter(
       (item) => {
-        return item.hostname.toLowerCase().search(this.state.inputText.toLowerCase()) !== -1;
+        return (
+          item.hostname.toLowerCase().search(this.state.inputText.toLowerCase()) !== -1  ||
+          item.address.toLowerCase().search(this.state.inputText.toLowerCase()) !== -1
+        )
       });
 
     const filteredRows = filteredData
