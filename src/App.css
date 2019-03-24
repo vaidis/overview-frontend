@@ -74,6 +74,11 @@ body {
   background: #ddd;
   border-radius: 2px;
 }
+.host.pingFalse.current_ping .address {
+  background: #ddd;
+  border-radius: 2px;
+  color: #000;
+}
 .host .current_check {
   border-radius: 2px; 
   background: #ddd;

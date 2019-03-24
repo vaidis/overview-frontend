@@ -53,7 +53,7 @@ class App extends Component {
       this.setState({ data: responseJson[0]['hosts'] });
       this.setState({ current_ping: responseJson[0]['current_ping'] });
       this.setState({ current_check: responseJson[0]['current_check'] });
-      console.log("PING: ", this.state.current_ping)
+      // console.log("PING: ", this.state.current_ping)
     })
     .catch((error) => {
       console.log(" fetchUrl() error ", error)
@@ -199,7 +199,7 @@ class App extends Component {
             type='text'
             name='filter'
             value={this.state.inputText}
-            placeholder="Search hostname"
+            placeholder="Search"
             onChange={evt => this.setFilter(evt)}
           />
         </div>
@@ -255,68 +255,25 @@ class App extends Component {
                 </div>
 
                 <div className={"modalButtons"}>
-
-                  <button onClick={() => {
-                    this.fetchUrlHost(this.state.address, "ps");
-                  }}>
-                    ps aufx
-                  </button>                
-
-                  <button onClick={() => {
-                    this.fetchUrlHost(this.state.address, "free");
-                  }}>
-                    free -h
-                  </button> 
-
-                  <button onClick={() => {
-                    this.fetchUrlHost(this.state.address, "dmesg");
-                  }}>
-                    dmesg
-                  </button>
-
-                  <button onClick={() => {
-                    this.fetchUrlHost(this.state.address, "mount");
-                  }}>
-                    mount
-                  </button>
-
-                  <button onClick={() => {
-                    this.fetchUrlHost(this.state.address, "df");
-                  }}>
-                    df -h
-                  </button>
-
-                  <button onClick={() => {
-                    this.fetchUrlHost(this.state.address, "route");
-                  }}>
-                    route -n
-                  </button>
-
-                  <button onClick={() => {
-                    this.fetchUrlHost(this.state.address, "netstat");
-                  }}>
-                    netstat -tulpn
-                  </button>
-
-                  <button onClick={() => {
-                    this.fetchUrlHost(this.state.address, "ifconfig");
-                  }}>
-                    ifconfig -a
-                  </button>
-
-                  <button onClick={() => {
-                    this.fetchUrlHost(this.state.address, "time");
-                  }}>
-                    date
-                  </button>
-
+                  <button onClick={() => {this.fetchUrlHost(this.state.address, "dmidecode");}}>dmidecode</button>
+                  <button onClick={() => {this.fetchUrlHost(this.state.address, "dmesg");}}>dmesg</button>
+                  <button onClick={() => {this.fetchUrlHost(this.state.address, "ps"); }}>ps aufx</button>                
+                  <button onClick={() => {this.fetchUrlHost(this.state.address, "free"); }}>free -h</button> 
+                  <button onClick={() => {this.fetchUrlHost(this.state.address, "mount");}}>mount</button>
+                  <button onClick={() => {this.fetchUrlHost(this.state.address, "df");}}>df -h</button>
+                  <button onClick={() => {this.fetchUrlHost(this.state.address, "partitions");}}>/proc/partitions</button>
+                  <button onClick={() => {this.fetchUrlHost(this.state.address, "route");}}>route -n</button>
+                  <button onClick={() => {this.fetchUrlHost(this.state.address, "netstata");}}>netstat -an</button>
+                  <button onClick={() => {this.fetchUrlHost(this.state.address, "netstatt");}}>netstat -tulpn</button>
+                  <button onClick={() => {this.fetchUrlHost(this.state.address, "ifconfig");}}>ifconfig -a</button>
+                  <button onClick={() => {this.fetchUrlHost(this.state.address, "time");}}>date</button>
+                  <button onClick={() => {this.fetchUrlHost(this.state.address, "hwclock");}}>hwclock</button>
                 </div>
 
                 <div className={"modalBody"}>
                   <div className={"loader" + (this.state.loading ? '' : 'hidden')}></div>
                   {this.renderHost()}
                 </div>
-
             </Modal>
         </div>
     )
