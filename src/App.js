@@ -47,13 +47,16 @@ class App extends Component {
   fetchUrl(url) {
     fetch(url, { signal })
     .then((response) => {
-      return response.json()
+      if (response.ok) {
+        return response.json()
+      } else {
+        this.setState({ data: '' });
+        throw Error(response.statusText);
+      }
     })
     .then(responseJson => {
       this.setState({ data: responseJson[0]['hosts'] });
-      this.setState({ current_ping: responseJson[0]['current_ping'] });
       this.setState({ current_check: responseJson[0]['current_check'] });
-      // console.log("PING: ", this.state.current_ping)
     })
     .catch((error) => {
       console.log(" fetchUrl() error ", error)
@@ -115,7 +118,7 @@ class App extends Component {
           + item.ping
           + (item.address === this.state.current_ping ? ' current_ping ' : '')
           + (item.root_usage > 80 ? ' warning ' : '')
-          + (item.checktemp >  75 ? ' warning ' : '')
+          + (item.checktemp >  80 ? ' warning ' : '')
           + (item.latency >   750 ? ' warning ' : '')
           + (item.root_usage > 90 ? ' danger ' : '')
           + (item.checktemp >  90 ? ' danger ' : '')
@@ -175,17 +178,29 @@ class App extends Component {
 
                       <div className={"field checktemp"}>
                         <span className='label'>{item.checktemp ? "temp:" : ""}</span>
-                          <span className={(item.checktemp > 75 ? 'warning' : '' ) + (item.checktemp > 90 ? ' danger' : '')}>{item.checktemp}</span>
+                          <span className={(item.checktemp > 80 ? 'warning' : '' ) + (item.checktemp > 90 ? ' danger' : '')}>{item.checktemp}</span>
                           <span className='label'>{item.checktemp ? "'C" : ""}
                         </span>
                       </div>
+
+                      <div className={"field checkupsstatus"}>
+                        <span className='label'>{item.checkupsstatus ? "status:" : ""}</span>
+                        <span className={(item.checkupsstatus)}>{item.checkupsstatus}</span>
+                      </div>
+
+                      <div className={"field checkupscapacity"}>
+                        <span className='label'>{item.checkupscapacity ? "Capacity:" : ""}</span>
+                        <span className={(item.checkupscapacity)}>{item.checkupscapacity}</span>
+                        <span className='label'>{item.checkupscapacity ? "%" : ""}</span>
+                      </div>
+
                   </div>
 
                 </div>
           </div>
         </div>
-          )
-        })
+        )
+      })
 
 
     return(
@@ -262,6 +277,7 @@ class App extends Component {
                   <button onClick={() => {this.fetchUrlHost(this.state.address, "mount");}}>mount</button>
                   <button onClick={() => {this.fetchUrlHost(this.state.address, "df");}}>df -h</button>
                   <button onClick={() => {this.fetchUrlHost(this.state.address, "partitions");}}>/proc/partitions</button>
+                  <button onClick={() => {this.fetchUrlHost(this.state.address, "cpuinfo");}}>/proc/cpuinfo</button>
                   <button onClick={() => {this.fetchUrlHost(this.state.address, "route");}}>route -n</button>
                   <button onClick={() => {this.fetchUrlHost(this.state.address, "netstata");}}>netstat -an</button>
                   <button onClick={() => {this.fetchUrlHost(this.state.address, "netstatt");}}>netstat -tulpn</button>

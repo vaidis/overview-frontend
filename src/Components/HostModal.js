@@ -1,17 +1,43 @@
 import React, { Component } from 'react';
 import Modal from 'react-modal';
+import 'abortcontroller-polyfill';
+
+const controller = new AbortController();
+const signal = controller.signal;
+const url = 'http://10.0.31.222:7777'
 
 class HostModal extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
+            os_name: props.os_name,
             hostResponse: '',
-            modalIsOpen: false,
         }
+
     }
-      
+
+        
+    fetchUrlHost(address, command) {
+        console.log(" === HostModal address ", address)
+        this.setState({ loading: true }); 
+        const urlHost = url + "/host?address=" + address + ";command=" + command;
+
+        fetch(urlHost, { signal })
+        .then((response) => {
+        return response.text()
+        })
+        .then(responseText => {     
+        this.setState({ hostResponse: responseText });
+        this.setState({ loading: false });
+        })
+        .catch((error) => {
+        console.log(" ---- fetchUrlHost() error: ", error)
+        }); 
+    }
+
     renderHost = () => {
+        console.log("renderHost ")
         return (<div> 
             {this.state.hostResponse.split('\n').map((line, i) => (
                 <div key={i}>{line.replace(/ /g, "\u00a0")}</div>
@@ -20,14 +46,11 @@ class HostModal extends Component {
     }
     
     render() {
-        console.log("modal render");
-        console.log("modal render ");
+        console.log("modal render() ");
         return (
             <Modal 
             className={"modal"}
-            onRequestClose={this.closeModal}
-            onAfterOpen={this.afterOpenModal}
-            isOpen={this.state.modalIsOpen} 
+
             style={{
                 overlay: {
                     backgroundColor: 'rgba(0,0,0,0.3)'
@@ -90,3 +113,10 @@ class HostModal extends Component {
 }
 
 export default HostModal;
+
+
+
+
+
+import HostModal from './Components/HostModal';
+{ this.state.modalIsOpen ? <HostModal url={this.state.address} os_name={this.state.os_name} /> : null }

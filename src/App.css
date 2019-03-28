@@ -40,6 +40,8 @@ body {
 .host{
   display: flex;
   background: #384951;
+  background: #434;
+  background: #999;
   margin: 3px;
   flex: 10px 10px;
   border-radius: 3px;
@@ -63,6 +65,7 @@ body {
 }
 .host.pingFalse {
   border-color: #384951;
+  border-color: #443;
 }
 .hostIcon {
 }
@@ -153,7 +156,7 @@ body {
 .host.pingFalse .hostname {
   text-align: right;
   float: right;
-  color: #999;
+  color: #111;
 }
 .host .bottom{
   width: 100%;
@@ -181,6 +184,9 @@ body {
   background: #fb0085;
   border-radius: 3px;
 }
+.host.pingFalse .field {
+  color: #111;
+}
 
 /* -------------------- FIELD LABELS -------------*/
 .host .field .label {
@@ -189,6 +195,9 @@ body {
 }
 .host .current_check .label {
   color: #666;
+}
+.host.pingFalse .label {
+  color: #999;
 }
 
 /* --------------------- MODAL -------------------*/
