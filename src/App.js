@@ -2,23 +2,22 @@ import React, { Component } from 'react';
 import './App.css';
 import 'abortcontroller-polyfill';
 import Modal from 'react-modal';
-
-Modal.setAppElement('body');
+import HostModal from './Components/HostModal'
 
 const url = 'http://10.0.31.222:7777'
 const controller = new AbortController();
 const signal = controller.signal;
 
+Modal.setAppElement('body');
 
 class App extends Component {
- 
+
   constructor(props) {
     super(props);
     this.state = {
       data: [],
       current_ping: '',
       filteredData: [],
-      hostResponse: '',
       modalIsOpen: false,
       loading: false,
       address: '',
@@ -35,12 +34,6 @@ class App extends Component {
   }
   componentWillUnmount() {
     controller.abort();
-  }
-  openModal = () => {
-    this.setState({ modalIsOpen: true});
-  }
-  closeModal = () => {
-    this.setState({ modalIsOpen: false });
   }
 
 
@@ -60,34 +53,7 @@ class App extends Component {
     })
     .catch((error) => {
       console.log(" fetchUrl() error ", error)
-    }); 
-  }
-
-
-  fetchUrlHost(address, command) {
-    this.setState({ loading: true }); 
-    const urlHost = url + "/host?address=" + address + ";command=" + command;
-
-    fetch(urlHost, { signal })
-    .then((response) => {
-      return response.text()
-    })
-    .then(responseText => {     
-      this.setState({ hostResponse: responseText });
-      this.setState({ loading: false });
-    })
-    .catch((error) => {
-      console.log(" ---- fetchUrlHost() error: ", error)
-    }); 
-  }
-
-
-  renderHost = () => {
-    return (<div> 
-      {this.state.hostResponse.split('\n').map((line, i) => (
-          <div key={i}>{line.replace(/ /g, "\u00a0")}</div>
-      ))}
-      </div>);
+    });
   }
 
 
@@ -96,12 +62,20 @@ class App extends Component {
       if(evt.target.value.match(/^[a-zA-Z0-9.-]*$/)){
         this.setState({
           inputText  : evt.target.value
-        });        
-      } 
+        });
+      }
     }
   }
-  
+
   render() {
+
+    const openModal = () => {
+      this.setState({ modalIsOpen: true});
+    }
+    const closeModal = () => {
+      this.setState({ modalIsOpen: false });
+      this.setState({ address: '' });
+    }
 
     const filteredData = this.state.data.filter(
       (item) => {
@@ -114,7 +88,8 @@ class App extends Component {
     const filteredRows = filteredData
     .map((item, key) => {
       return (
-        <div className={"host ping" 
+
+        <div className={"host ping"
           + item.ping
           + (item.address === this.state.current_ping ? ' current_ping ' : '')
           + (item.root_usage > 80 ? ' warning ' : '')
@@ -124,13 +99,13 @@ class App extends Component {
           + (item.checktemp >  90 ? ' danger ' : '')
           + (item.checkraid === "False" ? ' danger ' : '')
           + (item.checkgeo === "False" ? ' danger ' : '')}
-             key={key}
-             onClick={() => {
+            key={key}
+            onClick={() => {
               this.setState({ address: item.address });
               this.setState({ hostname: item.hostname });
               this.setState({ os_name: item.os_name });
               this.setState({ hostResponse: ''});
-              this.openModal();
+              openModal();
               }}>
 
                 <div className="hostIcon">
@@ -199,6 +174,7 @@ class App extends Component {
                 </div>
           </div>
         </div>
+
         )
       })
 
@@ -210,90 +186,32 @@ class App extends Component {
           <div  className="icon">
             <img alt="" src={"./search.png"}/>
           </div>
-          <input 
+          <input
             type='text'
             name='filter'
             value={this.state.inputText}
-            placeholder="Search"
             onChange={evt => this.setFilter(evt)}
+            placeholder="Search"
           />
         </div>
 
-      {filteredRows}
+        {filteredRows}
 
-            <Modal 
-              className={"modal"}
-              onRequestClose={this.closeModal}
-              onAfterOpen={this.afterOpenModal}
-              isOpen={this.state.modalIsOpen} 
-              style={{
-                overlay: {
-                  backgroundColor: 'rgba(0,0,0,0.3)'
-                },
-                content : {
-                  top                   : '5%',
-                  left                  : '2%',
-                  right                 : 'auto',
-                  bottom                : 'auto',
-                  marginRight           : '-50%',
-                  position              : 'fixed',
-                  opacity               : 1,
-                  overflowX             : 'hidden',
-                  overflowY             : 'hidden',
-                  animation             : 'show .5s ease',
-                },
-              }}
-              contentLabel="Modal">
+        { this.state.modalIsOpen ?
+          <HostModal
+            url={url}
+            address={this.state.address}
+            os_name={this.state.os_name}
+            hostname={this.state.hostname}
+            modalIsOpen={this.state.modalIsOpen}
+            closeModal={closeModal}
+          /> : null
+        }
 
-                <div className={"modalHeader"}>
-
-                  <div className={"modalIcon " + this.state.os_name}>
-                    <img alt="" src={"./" + this.state.os_name + ".png"}/>
-                  </div>
-
-                  <div className={"modalTitle"}>
-                    <span className="modalLabel">IP Address: </span>
-                    <span className="modalValue">{this.state.address}</span>
-                    <span className="modalLabel">Hostname: </span>
-                    <span className="modalValue">{this.state.hostname}
-                    </span>
-                  </div>
-
-                  <button className={"modalClose"} onClick={() => {
-                    this.setState({ address: '' });
-                    this.setState({ hostResponse: '' });
-                    this.closeModal();
-                    console.log(this.state.address);}}>
-                    &#10006;
-                  </button>
-
-                </div>
-
-                <div className={"modalButtons"}>
-                  <button onClick={() => {this.fetchUrlHost(this.state.address, "dmidecode");}}>dmidecode</button>
-                  <button onClick={() => {this.fetchUrlHost(this.state.address, "dmesg");}}>dmesg</button>
-                  <button onClick={() => {this.fetchUrlHost(this.state.address, "ps"); }}>ps aufx</button>                
-                  <button onClick={() => {this.fetchUrlHost(this.state.address, "free"); }}>free -h</button> 
-                  <button onClick={() => {this.fetchUrlHost(this.state.address, "mount");}}>mount</button>
-                  <button onClick={() => {this.fetchUrlHost(this.state.address, "df");}}>df -h</button>
-                  <button onClick={() => {this.fetchUrlHost(this.state.address, "partitions");}}>/proc/partitions</button>
-                  <button onClick={() => {this.fetchUrlHost(this.state.address, "cpuinfo");}}>/proc/cpuinfo</button>
-                  <button onClick={() => {this.fetchUrlHost(this.state.address, "route");}}>route -n</button>
-                  <button onClick={() => {this.fetchUrlHost(this.state.address, "netstata");}}>netstat -an</button>
-                  <button onClick={() => {this.fetchUrlHost(this.state.address, "netstatt");}}>netstat -tulpn</button>
-                  <button onClick={() => {this.fetchUrlHost(this.state.address, "ifconfig");}}>ifconfig -a</button>
-                  <button onClick={() => {this.fetchUrlHost(this.state.address, "time");}}>date</button>
-                  <button onClick={() => {this.fetchUrlHost(this.state.address, "hwclock");}}>hwclock</button>
-                </div>
-
-                <div className={"modalBody"}>
-                  <div className={"loader" + (this.state.loading ? '' : 'hidden')}></div>
-                  {this.renderHost()}
-                </div>
-            </Modal>
-        </div>
+      </div>
     )
   }
 };
 
 export default App;
+
