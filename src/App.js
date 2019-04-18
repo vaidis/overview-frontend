@@ -94,7 +94,7 @@ class App extends Component {
           + (item.address === this.state.current_ping ? ' current_ping ' : '')
           + (item.root_usage > 80 ? ' warning ' : '')
           + (item.checktemp >  80 ? ' warning ' : '')
-          + (item.latency >   750 ? ' warning ' : '')
+          + (item.latency >   500 ? ' warning ' : '')
           + (item.root_usage > 90 ? ' danger ' : '')
           + (item.checktemp >  90 ? ' danger ' : '')
           + (item.checkraid === "False" ? ' danger ' : '')
@@ -126,7 +126,7 @@ class App extends Component {
 
                     <div className={"field latency " + (item.latency > 9999 ? "hidden" : "")} >
                       <span className='label'>ping:</span>
-                      <span className={(item.latency > 750 ? 'warning' : '' )}>{item.latency < 9999 ? item.latency : "" }</span>
+                      <span className={(item.latency > 500 ? 'warning' : '' )}>{item.latency < 9999 ? item.latency : "" }</span>
                       <span className='label'>ms</span>
                     </div>
 
