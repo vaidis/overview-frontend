@@ -25,7 +25,8 @@ class HostModal extends Component {
           + (item.root_usage > 90 ? ' danger ' : '')
           + (item.checktemp >  90 ? ' danger ' : '')
           + (item.checkraid === "False" ? ' danger ' : '')
-          + (item.checkgeo === "False" ? ' danger ' : '')}
+          + (item.checkgeo === "False" ? ' danger ' : '')
+          + (item.checkclock !== 0 ? ' danger ' : '')}
           key={key}
           onClick={() => {
             this.setState({ address: item.address });

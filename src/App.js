@@ -95,10 +95,13 @@ class App extends Component {
           + (item.root_usage > 80 ? ' warning ' : '')
           + (item.checktemp >  80 ? ' warning ' : '')
           + (item.latency >   500 ? ' warning ' : '')
+          + ((item.checkclock > 60 || item.checkclock < -60)  ? ' warning ' : '')
           + (item.root_usage > 90 ? ' danger ' : '')
           + (item.checktemp >  90 ? ' danger ' : '')
           + (item.checkraid === "False" ? ' danger ' : '')
-          + (item.checkgeo === "False" ? ' danger ' : '')}
+          + (item.checkgeo === "False" ? ' danger ' : '')
+          + ((item.checkclock > 3600 || item.checkclock < -3600)  ? ' danger ' : '')
+        }
             key={key}
             onClick={() => {
               this.setState({ address: item.address });
@@ -116,21 +119,22 @@ class App extends Component {
 
                 <div className="hostBody">
 
-                  <div className="address">
-                    {item.address}
-                    <span className="type">{(item.type === "virtual") ? '[VM]' : ''}</span>
+                  <div className="top">
+                    <div className="address">
+                      {item.address}
+                      <span className="type">{(item.type === "virtual") ? '[VM]' : ''}</span>
+                    </div>
+                    <div className="hostname">{item.hostname}</div>
                   </div>
 
-                  <div className="hostname">{item.hostname}</div>
                   <div className="bottom ">
-
                     <div className={"field latency " + (item.latency > 9999 ? "hidden" : "")} >
                       <span className='label'>ping:</span>
                       <span className={(item.latency > 500 ? 'warning' : '' )}>{item.latency < 9999 ? item.latency : "" }</span>
                       <span className='label'>ms</span>
                     </div>
 
-                  <div className={(item.address === this.state.current_check ? ' current_check ' : '')} >
+                    <div className={(item.address === this.state.current_check ? ' current_check ' : '')} >
                       <div className={"field rootusage"}>
                         <span className='label'>{item.root_usage ? "disk:" : ""}</span>
                         <span className={(item.root_usage > 80 ? 'warning' : '' )+(item.root_usage > 90 ? ' danger' : '')}>{item.root_usage}</span>
@@ -169,8 +173,18 @@ class App extends Component {
                         <span className='label'>{item.checkupscapacity ? "%" : ""}</span>
                       </div>
 
-                  </div>
 
+                      {(typeof item.checkclock !== 'undefined')
+                      ? ( <div className={"field checkclock"}>
+                          <span className='label'>Clock:</span>
+                          <span className={((item.checkclock > 60 || item.checkclock < -60) ? 'warning' : '' ) + ((item.checkclock > 3600 || item.checkclock < -3600) ? ' danger' : '')}>{item.checkclock}</span>
+                          <span className='label'>ms</span>
+                        </div>) 
+                      : null}
+
+
+
+                    </div>
                 </div>
           </div>
         </div>
