@@ -101,6 +101,7 @@ class App extends Component {
           + (item.checkraid === "False" ? ' danger ' : '')
           + (item.checkgeo === "False" ? ' danger ' : '')
           + ((item.checkclock > 3600 || item.checkclock < -3600)  ? ' danger ' : '')
+          + (item.address === this.state.current_check ? ' current_check ' : '')
         }
             key={key}
             onClick={() => {
@@ -134,7 +135,6 @@ class App extends Component {
                       <span className='label'>ms</span>
                     </div>
 
-                    <div className={(item.address === this.state.current_check ? ' current_check ' : '')} >
                       <div className={"field rootusage"}>
                         <span className='label'>{item.root_usage ? "disk:" : ""}</span>
                         <span className={(item.root_usage > 80 ? 'warning' : '' )+(item.root_usage > 90 ? ' danger' : '')}>{item.root_usage}</span>
@@ -182,9 +182,6 @@ class App extends Component {
                         </div>) 
                       : null}
 
-
-
-                    </div>
                 </div>
           </div>
         </div>

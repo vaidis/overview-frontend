@@ -36,7 +36,8 @@ body {
 
 .hidden { display:none; }
 .top    {margin-top: 1px;}
-.bottom {margin-top: 1px;}
+.bottom {margin-top: 1px; opacity: 0;}
+.warning .bottom {margin-top: 1px; opacity: 1;}
 
 /* --------------------- HOST BOX ----------------*/
 .host{
@@ -45,30 +46,30 @@ body {
   background: #434;
   background: #999;
   background: #888;
-  margin: 3px 6px;
+  margin: 3px 6px 4px 6px;
   flex: 10px 10px;
   border-radius: 3px;
   border-top-left-radius: 25px;
   border-bottom-left-radius: 25px;
   box-shadow: 1px 2px 10px -5px #111;
   height: 33px;
-  width: 16%;
+  width: 15.5%;
+  border-right: 5px solid white;
 }
 .host.pingTrue {
   border-color: #fff;
   background: #fff;
 }
 .host.warning {
-  border-color: #fff000;
+  border-color: #f9ffcf;
   background: #f9ffcf;
 }
 .host.danger {
-  border-color: #fb0075;
+  border-color: #ffe8f9;
   background: #ffe8f9;
 }
 .host.pingFalse {
-  border-color: #384951;
-  border-color: #443;
+  border-color: #888;
 }
 .hostIcon {
 }
@@ -85,14 +86,7 @@ body {
   border-radius: 2px;
   color: #000;
 }
-.host .current_check {
-  border-radius: 2px; 
-  background: #ddd;
-  background: #dfd;
-  color: #000;  
-  float: right;
-  padding: 1px;
-}
+
 
 
 /* --------------------- ICON ------------------- */
@@ -328,7 +322,7 @@ body {
 .filter {
   width: 16%;
   /* width: 290px; */
-  margin: 3px 6px;
+  margin: 3px 6px 4px 6px;
   background:  #0d3b96;
   border-radius: 3px;
   border-top-left-radius: 25px;
@@ -360,6 +354,12 @@ body {
   font-style: italic;
   font-size: 14px;
 }
+
+.host.current_check {
+  /* background: #259; */
+  border-right: 5px solid #22EEAA;
+}
+
 
 /* --------------------- LOADER ------------------*/
 .loader {
